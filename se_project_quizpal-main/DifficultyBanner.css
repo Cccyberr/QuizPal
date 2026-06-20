@@ -1,0 +1,8 @@
+.difficulty-banner { display:inline-flex; align-items:center; gap:12px; padding:12px 20px; border-radius:10px; box-shadow:0 8px 22px rgba(0,0,0,0.08); color:#fff; font-weight:600 }
+.diff-easy { background: linear-gradient(90deg,#34d399,#10b981); }
+.diff-medium { background: linear-gradient(90deg,#f59e0b,#f97316); }
+.diff-hard { background: linear-gradient(90deg,#ef4444,#dc2626); }
+.diff-emoji { font-size:20px }
+.diff-label { font-size:18px; letter-spacing:1px; margin-right:8px }
+.diff-sub { font-weight:400; opacity:0.95; font-size:14px }
+.difficulty-banner.small { padding:6px 10px; font-size:12px; border-radius:8px }

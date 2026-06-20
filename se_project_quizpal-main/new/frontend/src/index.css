@@ -1,0 +1,361 @@
+/* src/index.css
+   Complex and reusable styling for the QuizPal frontend.
+   - CSS variables (light + dark)
+   - Responsive container / grid system
+   - Accessible focus rings and reduced-motion support
+   - Form, button, navbar, card, table, and utility classes
+   - Simple "dark-theme" toggle using .dark-theme on <body>
+*/
+
+/* =========================
+   Variables (Light theme)
+   ========================= */
+:root{
+  /* Color palette */
+  --bg: #f7f9fb;
+  --surface: #ffffff;
+  --muted: #6b7280;
+  --text: #0f172a;
+  --primary: #0ea5a4;        /* teal */
+  --primary-600: #089089;
+  --accent: #7c3aed;         /* purple */
+  --success: #16a34a;
+  --danger: #ef4444;
+  --glass: rgba(255,255,255,0.6);
+
+  /* Spacing & sizes */
+  --space-xs: 4px;
+  --space-sm: 8px;
+  --space-md: 16px;
+  --space-lg: 24px;
+  --space-xl: 40px;
+
+  --radius-sm: 6px;
+  --radius-md: 12px;
+  --radius-lg: 18px;
+
+  --shadow-sm: 0 1px 3px rgba(12,15,20,0.06);
+  --shadow-md: 0 8px 24px rgba(12,15,20,0.08);
+
+  --max-width: 1120px;
+  --container-padding: 20px;
+
+  --transition-fast: 160ms;
+  --transition-medium: 260ms;
+}
+
+/* =========================
+   Dark theme (toggle body.dark-theme)
+   ========================= */
+body.dark-theme {
+  --bg: #0b1220;
+  --surface: #0f1724;
+  --muted: #9aa4b2;
+  --text: #e6eef7;
+  --primary: #34d399;
+  --primary-600: #10b981;
+  --accent: #9f7aea;
+  --success: #34d399;
+  --danger: #fb7185;
+  --glass: rgba(255,255,255,0.04);
+
+  --shadow-sm: 0 1px 3px rgba(2,6,23,0.6);
+  --shadow-md: 0 10px 30px rgba(2,6,23,0.6);
+}
+
+/* =========================
+   Global resets & typography
+   ========================= */
+*,
+*::before,
+*::after { box-sizing: border-box; }
+
+html,body,#root {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+  background: linear-gradient(180deg, var(--bg) 0%, color-mix(in srgb, var(--bg) 80%, #fff 20%) 100%);
+  color: var(--text);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  line-height: 1.45;
+  font-size: 16px;
+  transition: background var(--transition-medium) ease, color var(--transition-medium) ease;
+}
+
+/* Respect user motion preferences */
+@media (prefers-reduced-motion: reduce) {
+  :root { --transition-fast: 0ms; --transition-medium: 0ms; }
+  * { animation-duration: 0s !important; transition-duration: 0s !important; }
+}
+
+/* =========================
+   Layout helpers
+   ========================= */
+.container {
+  width: 100%;
+  max-width: var(--max-width);
+  margin: 0 auto;
+  padding: 0 var(--container-padding);
+}
+
+.stack { display: flex; flex-direction: column; gap: var(--space-md); }
+.row { display:flex; gap: var(--space-md); align-items:center; }
+
+/* Responsive grid */
+.grid {
+  display: grid;
+  gap: var(--space-md);
+}
+.grid-2 { grid-template-columns: repeat(2, minmax(0,1fr)); }
+.grid-3 { grid-template-columns: repeat(3, minmax(0,1fr)); }
+@media (max-width: 900px) {
+  .grid-2, .grid-3 { grid-template-columns: 1fr; }
+}
+
+/* Card component */
+.card {
+  background: linear-gradient(180deg, color-mix(in srgb, var(--surface), var(--glass) 10%), var(--surface));
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-sm);
+  padding: var(--space-md);
+  transition: transform var(--transition-fast) ease, box-shadow var(--transition-fast) ease;
+  border: 1px solid rgba(0,0,0,0.03);
+}
+.card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-md);
+}
+
+/* Navbar */
+.navbar {
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap: var(--space-md);
+  padding: 12px var(--container-padding);
+  background: linear-gradient(90deg, rgba(255,255,255,0.02), rgba(255,255,255,0));
+  border-bottom: 1px solid rgba(0,0,0,0.04);
+  position: sticky;
+  top: 0;
+  z-index: 40;
+  backdrop-filter: blur(6px);
+}
+.navbar .brand { font-weight:700; letter-spacing: -0.02em; display:flex; align-items:center; gap:8px; }
+.brand .logo {
+  width:36px; height:36px; border-radius:8px; display:inline-grid; place-items:center;
+  background: linear-gradient(135deg, var(--primary), var(--accent));
+  color:white; font-weight:700;
+  box-shadow: 0 6px 16px rgba(11, 20, 40, 0.12);
+}
+.nav-links { display:flex; gap:12px; align-items:center; }
+.nav-links a { text-decoration:none; color:var(--muted); padding:8px 10px; border-radius:8px; transition: background var(--transition-fast); }
+.nav-links a:hover { background: rgba(0,0,0,0.04); color:var(--text); }
+
+/* =========================
+   Forms & Inputs
+   ========================= */
+.form {
+  display:block;
+  width:100%;
+  max-width: 760px;
+}
+.field {
+  display:flex;
+  flex-direction:column;
+  gap:8px;
+  margin-bottom: var(--space-md);
+}
+.label { font-size:0.9rem; color:var(--muted); }
+.input, .select, .textarea {
+  padding: 10px 12px;
+  border-radius: var(--radius-sm);
+  border: 1px solid rgba(0,0,0,0.06);
+  background: linear-gradient(180deg, color-mix(in srgb, var(--surface), transparent 10%), var(--surface));
+  outline: none;
+  font-size: 1rem;
+  transition: box-shadow var(--transition-fast), border-color var(--transition-fast), transform var(--transition-fast);
+  box-shadow: none;
+}
+.input:focus, .select:focus, .textarea:focus {
+  border-color: color-mix(in srgb, var(--primary) 80%, var(--accent) 20%);
+  box-shadow: 0 6px 18px rgba(14,165,164, 0.08);
+  transform: translateY(-1px);
+}
+.input[type="checkbox"], .input[type="radio"] { width: auto; }
+
+/* Textarea sizing */
+.textarea { min-height: 120px; resize: vertical; }
+
+/* Helper: compact form row for inline fields (email+pass) */
+.form-row { display:flex; gap: var(--space-sm); }
+.form-row .field { flex:1; margin-bottom:0; }
+
+/* Validation / helper text */
+.help { color: var(--muted); font-size: 0.9rem; margin-top: 6px; }
+.input-error { border-color: var(--danger); box-shadow: 0 6px 18px rgba(239,68,68,0.06); }
+.error-text { color: var(--danger); font-size:0.9rem; }
+
+/* =========================
+   Buttons (primary, ghost, outline)
+   ========================= */
+.btn {
+  display:inline-flex;
+  align-items:center;
+  gap:10px;
+  padding: 10px 16px;
+  border-radius: 10px;
+  border: none;
+  cursor: pointer;
+  font-weight: 600;
+  user-select: none;
+  transition: transform var(--transition-fast), box-shadow var(--transition-fast), opacity var(--transition-fast);
+  box-shadow: 0 6px 12px rgba(2,6,23,0.06);
+}
+.btn:active { transform: translateY(1px); }
+.btn:disabled { opacity: 0.6; cursor: not-allowed; transform: none; box-shadow: none; }
+
+/* Primary button */
+.btn-primary {
+  background: linear-gradient(135deg, var(--primary), var(--primary-600));
+  color: white;
+  box-shadow: 0 8px 20px rgba(14,165,164,0.12);
+}
+.btn-primary:hover { transform: translateY(-2px); }
+
+/* Outline & ghost */
+.btn-outline {
+  background: transparent;
+  border: 1px solid rgba(0,0,0,0.08);
+  color: var(--text);
+}
+.btn-ghost {
+  background: transparent;
+  color: var(--muted);
+}
+
+/* Small and large sizes */
+.btn-sm { padding: 6px 10px; font-size: 0.9rem; border-radius: 8px; }
+.btn-lg { padding: 14px 20px; font-size: 1.05rem; border-radius: 12px; }
+
+/* Icon-only */
+.btn-icon { padding: 8px; width:40px; height:40px; justify-content:center; }
+
+/* =========================
+   Tables & lists
+   ========================= */
+.table {
+  width:100%;
+  border-collapse: collapse;
+  background: transparent;
+  margin-top: var(--space-md);
+}
+.table th, .table td {
+  text-align: left;
+  padding: 10px 12px;
+  border-bottom: 1px solid rgba(0,0,0,0.04);
+}
+.table th { color: var(--muted); font-size: 0.95rem; }
+.table tr:hover td { background: color-mix(in srgb, var(--surface) 90%, var(--glass) 10%); }
+
+/* =========================
+   Small components
+   ========================= */
+.kv { display:flex; gap:8px; align-items:center; }
+.badge {
+  display:inline-block; padding:4px 10px; border-radius:999px; font-size:0.85rem; background: color-mix(in srgb, var(--accent) 14%, var(--surface));
+  color: var(--accent);
+}
+.tag { font-size:0.85rem; padding:4px 8px; border-radius:6px; background: rgba(0,0,0,0.04); color:var(--muted); }
+
+/* Empty / placeholder view */
+.empty {
+  text-align:center;
+  padding: var(--space-lg);
+  color: var(--muted);
+  border-radius: var(--radius-md);
+  background: linear-gradient(90deg, rgba(0,0,0,0.01), transparent);
+}
+
+/* =========================
+   Accessibility: focus outlines
+   ========================= */
+:focus {
+  outline: none;
+}
+:focus-visible {
+  outline: 3px solid color-mix(in srgb, var(--primary) 70%, #fff 30%);
+  outline-offset: 3px;
+  border-radius: 8px;
+}
+
+/* =========================
+   Utilities
+   ========================= */
+.text-center { text-align:center; }
+.muted { color: var(--muted); }
+.flex { display:flex; }
+.center { display:grid; place-items:center; }
+.full-height { min-height: calc(100vh - 64px); }
+
+/* Margins helpers (some examples) */
+.mt-8 { margin-top: var(--space-lg); }
+.mb-4 { margin-bottom: var(--space-md); }
+
+/* Small animations */
+@keyframes floatUp {
+  from { transform: translateY(6px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+.fade-in { animation: floatUp 360ms cubic-bezier(.2,.9,.3,1) both; }
+
+/* =========================
+   Example page layout presets
+   ========================= */
+.page {
+  padding: var(--space-lg) var(--container-padding);
+  max-width: var(--max-width);
+  margin: 0 auto;
+}
+.hero {
+  display:flex;
+  justify-content:space-between;
+  gap: var(--space-lg);
+  align-items:center;
+  padding: var(--space-lg);
+  margin-bottom: var(--space-lg);
+}
+@media (max-width: 900px) {
+  .hero { flex-direction: column; align-items:stretch; text-align:center; }
+}
+
+/* =========================
+   Small utilities for theme toggle button
+   ========================= */
+.theme-toggle {
+  display:inline-flex;
+  gap:8px;
+  align-items:center;
+  padding:6px 10px;
+  border-radius: 999px;
+  background: linear-gradient(90deg, rgba(0,0,0,0.02), transparent);
+  border:1px solid rgba(0,0,0,0.04);
+  cursor:pointer;
+}
+.theme-toggle .dot {
+  width:18px; height:18px; border-radius:50%;
+  background: linear-gradient(135deg, var(--primary), var(--accent));
+}
+
+/* =========================
+   Small tips for use in JS
+   =========================
+   - Toggle dark theme: document.body.classList.toggle('dark-theme')
+   - Use .container and .card for centered content and neat surfaces
+   - Buttons: .btn .btn-primary | .btn-outline | .btn-ghost
+   - Inputs: <input class="input" />
+   - Add .fade-in to elements you want animated on mount
+   ========================= */
